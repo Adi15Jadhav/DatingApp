@@ -49,7 +49,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
             if (user is null)
                 return Unauthorized("Invalid Username");
 
@@ -68,6 +68,19 @@ namespace API.Controllers
                 Username = user.UserName,
                 Token = tokenServiece.CreateToken(user)
             };
+        }
+
+        [HttpPost("deleteUser")]
+        public async Task<ActionResult<UserDto>> Delete(int id)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (user is null)
+                return Unauthorized("Invalid User");
+
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+
+            return Ok("Deleted the user.");
         }
     }
 }
