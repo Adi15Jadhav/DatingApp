@@ -24,7 +24,7 @@ namespace API.Controllers
             return Ok(users);
         }
 
-        //api/usrs/2
+        //api/user/2
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers(int id)
         {
